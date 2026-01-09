@@ -15,8 +15,7 @@
 - [ ] /create-branch - ブランチ作成
 - [ ] /design - 設計ドキュメント生成
 - [ ] /tdd - TDD実装 + コード品質改善 + テスト品質改善
-- [ ] /self-refine - コードレビュー＋自動修正
-- [ ] /test-self-refine - テストレビュー＋自動修正
+- [ ] /comment-self-refine - コメント品質自動改善
 - [ ] /doc-write - ドキュメント作成
 - [ ] /doc-review - ドキュメントレビュー
 - [ ] /ui-test-design - UIテスト設計
@@ -40,3 +39,4 @@
 {{#each PHASE_STATUS}}
 | {{NAME}} | {{STATUS}} |
 {{/each}}
+

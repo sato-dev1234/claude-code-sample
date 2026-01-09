@@ -17,10 +17,9 @@ allowed-tools: "Read, Write, Edit, Bash, Task, Glob, Grep, AskUserQuestion"
 
 5. Format design as `DESIGN` variable
 
-6. Launch agent to implement with TDD:
-
-   Agent 1: implementing-tdd sonnet agent
-   Execute Canon TDD workflow (Red-Green-Refactor) with Self-Refine quality improvement. Read ~/.claude/skills/implementing-tdd/SKILL.md and execute with REQUIREMENTS and DESIGN.
+6. Execute implementing-tdd:
+   - Resolve CONFIG: `python ~/.claude/scripts/resolve_config.py "$CWD" implementing-tdd`
+   - Read ~/.claude/skills/implementing-tdd/SKILL.md and execute with REQUIREMENTS, DESIGN, TICKET_PATH, and CONFIG
 
    Capture: `TDD_FILES` (files created/modified), `TDD_TEST_COUNT` (test count)
 
@@ -45,9 +44,9 @@ allowed-tools: "Read, Write, Edit, Bash, Task, Glob, Grep, AskUserQuestion"
    - [ ] Fix 3 (skip if no issues)
    ```
 
-   **Review**: Launch 2 agents in parallel with GATHERED_INFO, TICKET_PATH, and CONFIG:
-   - reviewing-code (sonnet)
-   - reviewing-comments (sonnet)
+   **Review**:
+   - Resolve CONFIG: `python ~/.claude/scripts/resolve_config.py "$CWD" reviewing-code`
+   - Read ~/.claude/skills/reviewing-code/SKILL.md and execute with GATHERED_INFO, TICKET_PATH, and CONFIG
 
    Output: "Review N: ISSUE_COUNT = {count of score >= 80}"
 
@@ -80,9 +79,8 @@ allowed-tools: "Read, Write, Edit, Bash, Task, Glob, Grep, AskUserQuestion"
     - [ ] Fix 3 (skip if no issues)
     ```
 
-    **Review**: Launch 4 agents in parallel with GATHERED_INFO, TICKET_PATH, and CONFIG:
+    **Review**: Launch 3 agents in parallel with GATHERED_INFO, TICKET_PATH, and CONFIG:
     - reviewing-test (sonnet)
-    - reviewing-comments (sonnet)
     - reviewing-flaky-patterns (sonnet)
     - reviewing-assertion-quality (haiku)
 
@@ -124,3 +122,4 @@ allowed-tools: "Read, Write, Edit, Bash, Task, Glob, Grep, AskUserQuestion"
     ```
 
 19. Mark `/tdd` as completed in <TICKET_PATH>/tasks.md Workflow section
+

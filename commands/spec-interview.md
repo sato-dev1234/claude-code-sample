@@ -17,6 +17,7 @@ allowed-tools: "Read, Write, AskUserQuestion"
 
 5. Write the spec to `<TICKET_PATH>/requirements.md`
 
-6. Mark `/spec-interview` as completed in `<TICKET_PATH>/tasks.md` Workflow section
+6. Mark `/spec-interview` as completed in <TICKET_PATH>/tasks.md Workflow section
 
 7. Execute managing-tickets skill with add-knowledge-ref operation to regenerate knowledge-refs.md from the updated requirements.md
+

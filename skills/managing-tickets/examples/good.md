@@ -34,10 +34,11 @@ Default workflow commands:
 ```markdown
 ## Workflow
 
+- [ ] /spec-interview - 仕様インタビュー
+- [ ] /create-branch - ブランチ作成
 - [ ] /design - 設計ドキュメント生成
-- [ ] /tdd - TDD実装
-- [ ] /code-review - コードレビュー
-- [ ] /test-review - テストレビュー
+- [ ] /tdd - TDD実装 + コード品質改善 + テスト品質改善
+- [ ] /comment-self-refine - コメント品質自動改善
 - [ ] /doc-write - ドキュメント作成
 - [ ] /doc-review - ドキュメントレビュー
 - [ ] /ui-test-design - UIテスト設計
@@ -60,3 +61,4 @@ Always include item count table in requirements.md:
 | Technical Items | 4 | Pending |
 | **Total** | **12** | **In Progress** |
 ```
+
