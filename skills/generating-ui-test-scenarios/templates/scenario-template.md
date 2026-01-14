@@ -3,19 +3,14 @@
 {{#each TEST_CASES}}
 ## {{INDEX}}. {{TITLE}}
 
-### 前提条件
-{{#each PRECONDITIONS}}
-- {{this}}
-{{/each}}
+**前提**: {{PRECONDITION}}
 
-### 操作手順
-{{#each OPERATIONS}}
-{{INDEX}}. {{this}}
-{{/each}}
-
-### 確認項目
-{{#each VERIFICATIONS}}
-- [ ] {{this}}
+### 手順
+{{#each STEPS}}
+{{INDEX}}. {{OPERATION}}
+{{#if VERIFICATIONS}}
+   - [ ] {{VERIFICATION}}
+{{/if}}
 {{/each}}
 
 {{/each}}

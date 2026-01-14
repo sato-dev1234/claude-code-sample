@@ -2,6 +2,7 @@
 name: reviewing-flaky-patterns
 description: "Detects test flakiness patterns including timing issues, environmental dependencies, state pollution, and non-deterministic behaviors. Use as part of parallel test review execution."
 allowed-tools: Read, Grep, Glob
+context: fork
 ---
 
 ## Review criteria
@@ -24,6 +25,8 @@ allowed-tools: Read, Grep, Glob
 - External API calls: mock external services
 
 ## Review workflow
+
+Copy this checklist and track your progress:
 
 ```
 Progress:

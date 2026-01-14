@@ -39,7 +39,7 @@ Progress:
 **Step 1: Resolve configuration**
 
 Resolve configuration:
-- Execute: `python ~/.claude/scripts/resolve_config.py "$CWD" managing-tickets`
+- Run: `python ~/.claude/scripts/resolve_config.py "$CWD" managing-tickets`
 - Parse JSON output → `CONFIG`
 - CONFIG contains: BASE_PATH, TICKETS
 
@@ -115,7 +115,7 @@ Execute based on OPERATION:
 ### create
 
 #### Auto-numbering (when TICKET_ID not provided)
-Execute:
+Run:
 ```bash
 python ~/.claude/scripts/next_ticket_id.py "$TICKETS_PATH" "$TICKET_PREFIX" "$TICKET_DIGITS"
 ```
@@ -179,7 +179,7 @@ If script fails → show error message from stderr, END with exit code 1
        }
        ```
     8. If no matches → data structure has empty arrays for all sections
-    9. Execute: `echo '<json>' | python ~/.claude/scripts/regenerate_knowledge_refs.py "$TICKET_PATH" "$KNOWLEDGE_PATH"`
+    9. Run: `echo '<json>' | python ~/.claude/scripts/regenerate_knowledge_refs.py "$TICKET_PATH" "$KNOWLEDGE_PATH"`
        - If error → Error: display error message, END with exit code 1
 
 #### Write files
@@ -250,7 +250,7 @@ If script fails → show error message from stderr, END with exit code 1
   }
   ```
 - If no matches → data structure has empty arrays for all sections
-- Execute: `echo '<json>' | python ~/.claude/scripts/regenerate_knowledge_refs.py "$TICKET_PATH" "$KNOWLEDGE_PATH"`
+- Run: `echo '<json>' | python ~/.claude/scripts/regenerate_knowledge_refs.py "$TICKET_PATH" "$KNOWLEDGE_PATH"`
   - If error → Error: display error message, END with exit code 1
 - Output: TICKET_PATH=<ticket_folder_path>
 - END

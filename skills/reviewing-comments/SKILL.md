@@ -39,6 +39,8 @@ Principle: Comments should serve their intended purpose - providing context and 
 
 ## Review workflow
 
+Copy this checklist and track your progress:
+
 ```
 Progress:
 - [ ] Step 1: Parse GATHERED_INFO, TICKET_PATH, and CONFIG

@@ -2,9 +2,12 @@
 name: reviewing-code
 description: "Generic code review for production code. Use as part of parallel code review execution."
 allowed-tools: Read, Grep, Glob
+context: fork
 ---
 
 ## Review workflow
+
+Copy this checklist and track your progress:
 
 ```
 Progress:

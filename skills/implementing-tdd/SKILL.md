@@ -2,6 +2,7 @@
 name: implementing-tdd
 description: "TDD workflow executor using Canon TDD (Red-Green-Refactor). Supports test list creation, failing test writing, minimal implementation, and refactoring with test verification. Use when implementing features with TDD approach."
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
+context: fork
 ---
 
 ## Quick start
@@ -25,29 +26,26 @@ Copy this checklist and track your progress:
 ```
 Progress:
 - [ ] Step 1: Parse REQUIREMENTS, DESIGN, and KNOWLEDGE
-- [ ] Step 2: Create test list
+- [ ] Step 2: Create test list (or use provided TEST_LIST)
 - [ ] Step 3: Execute RED-GREEN-REFACTOR cycle
 - [ ] Step 4: Generate completion report
 ```
 
 **Step 1: Parse REQUIREMENTS, DESIGN, and KNOWLEDGE**
 
-Parse REQUIREMENTS from task prompt (ticket AC or user requirements).
+Parse REQUIREMENTS from task prompt.
 
-Parse DESIGN from task prompt (design document from /design command).
+Parse DESIGN from task prompt.
+
+Parse TEST_LIST (optional) from task prompt. If TEST_LIST is provided, skip Step 2.
 
 Run: `python ~/.claude/scripts/resolve_knowledge.py --refs "${TICKET_PATH}/knowledge-refs.md" --workflow "/tdd" --base "${CONFIG.BASE_PATH}"`
 
-On success/partial: use `knowledge[].content` for Troubleshooting section
+- On success/partial: use `knowledge[].content` for Troubleshooting section
 
 **Step 2: Create test list**
 
 Create test list from requirements and design, ordered simple to complex.
-
-Consider from DESIGN:
-- Design constraints and architectural decisions
-- Interface contracts and data structures
-- Error handling patterns specified in design
 
 ## Implementation principles
 

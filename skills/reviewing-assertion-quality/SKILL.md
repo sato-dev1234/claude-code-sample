@@ -2,6 +2,7 @@
 name: reviewing-assertion-quality
 description: "Reviews test code for assertion quality including precision levels, property coverage, and validation patterns. Use as part of parallel test review execution."
 allowed-tools: Read, Grep, Glob
+context: fork
 ---
 
 ## Review criteria
@@ -19,6 +20,8 @@ allowed-tools: Read, Grep, Glob
 - Truthy/Falsy: prefer property-based assertions over boolean checks
 
 ## Review workflow
+
+Copy this checklist and track your progress:
 
 ```
 Progress:

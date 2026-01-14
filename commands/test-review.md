@@ -11,8 +11,8 @@ allowed-tools: "Read, Write, Bash, Task, Glob, Grep, AskUserQuestion"
 
 3. Determine test file filter via AskUserQuestion: e.g., `*Test.kt`, `*.spec.ts`, `*_test.py`
 
-4. Gather: diff + changed test file contents → `GATHERED_INFO`
-   - Test file patterns: `*Test.kt`, `*Test.java`, `*.spec.ts`, `*.test.ts`, `*_test.go`, `*_test.py`, `test_*.py`
+4. Launch Explore agent to gather git info → `GATHERED_INFO`
+   - "Get git diff (use scope from Step 2). Read changed test files matching filter from Step 3. Return diff and file contents."
 
 5. Launch 3 agents in parallel with GATHERED_INFO, TICKET_PATH, and CONFIG:
    - reviewing-test (sonnet)

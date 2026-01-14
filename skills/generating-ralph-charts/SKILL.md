@@ -2,6 +2,7 @@
 name: generating-ralph-charts
 description: "Generates RALPH charts (factor-level analysis diagrams) for HAYST method test design. Use when designing combination tests, identifying test coverage gaps, or analyzing system behavior factors."
 allowed-tools: Read, Grep, Glob, Write, AskUserQuestion
+context: fork
 ---
 
 ## RALPH chart workflow
@@ -42,7 +43,7 @@ Read templates (Handlebars format):
 
 Run: `python ~/.claude/scripts/resolve_knowledge.py --refs "${TICKET_PATH}/knowledge-refs.md" --workflow "/ui-test-design" --base "${CONFIG.BASE_PATH}"`
 
-On success/partial: use `knowledge[].content` for Terminology and Specifications sections
+- On success/partial: use `knowledge[].content` for Terminology and Specifications sections
 
 **Step 5: Analyze GATHERED_INFO**
 

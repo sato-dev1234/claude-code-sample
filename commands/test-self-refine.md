@@ -11,8 +11,8 @@ allowed-tools: "Read, Write, Edit, Bash, Glob, Grep, Task, AskUserQuestion"
 
 3. Determine test file filter via AskUserQuestion: e.g., `*Test.kt`, `*.spec.ts`, `*_test.py`
 
-4. Gather: diff + changed test file contents → `GATHERED_INFO`
-   - Test file patterns: `*Test.kt`, `*Test.java`, `*.spec.ts`, `*.test.ts`, `*_test.go`, `*_test.py`, `test_*.py`
+4. Launch Explore agent to gather git info → `GATHERED_INFO`
+   - "Get git diff (use scope from Step 2). Read changed test files matching filter from Step 3. Return diff and file contents."
 
 5. Self-Refine Loop:
 
@@ -38,10 +38,7 @@ allowed-tools: "Read, Write, Edit, Bash, Glob, Grep, Task, AskUserQuestion"
    Instructions: "Fix issues with score >= 80. Do not fix issues requiring fundamental test design changes or production code changes. Use ~/.claude/templates/self-refine-report.md"
    After fix: Re-run step 4 to update GATHERED_INFO
 
-6. Write report to `<TICKET_PATH>/test-self-refine-report.md`:
-   - Iterations count, total fixes applied
-   - Per-iteration details
-   - Remaining issues
+6. Write report to `<TICKET_PATH>/test-self-refine-report.md`
 
 7. Report summary in Japanese
 

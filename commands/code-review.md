@@ -9,7 +9,8 @@ allowed-tools: "Read, Write, Bash, Glob, Grep, AskUserQuestion"
 
 2. Determine scope via AskUserQuestion: uncommitted (`git diff HEAD`) or branch (`git diff <BASE>...HEAD`)
 
-3. Use gathering-git-info skill → `GATHERED_INFO`
+3. Launch Explore agent to gather git info → `GATHERED_INFO`
+   - "Get git diff (use scope from Step 2). Read changed files. Return diff and file contents."
 
 4. Execute reviewing-code:
    - Resolve CONFIG: `python ~/.claude/scripts/resolve_config.py "$CWD" reviewing-code`

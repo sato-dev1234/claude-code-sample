@@ -26,7 +26,7 @@ Progress:
 
 **Step 1: Resolve configuration**
 
-- Execute: `python ~/.claude/scripts/resolve_config.py "$CWD" retrieving-knowledge`
+- Run: `python ~/.claude/scripts/resolve_config.py "$CWD" retrieving-knowledge`
 - Parse JSON output → CONFIG
 - CONFIG contains: BASE_PATH
 

@@ -39,4 +39,3 @@
 {{#each PHASE_STATUS}}
 | {{NAME}} | {{STATUS}} |
 {{/each}}
-

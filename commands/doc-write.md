@@ -9,7 +9,8 @@ allowed-tools: "Read, Write, Edit, Bash, Task, Glob, Grep, AskUserQuestion"
 
 2. Determine scope via AskUserQuestion: uncommitted (`git diff HEAD`) or branch (`git diff <BASE>...HEAD`)
 
-3. Gather: diff + changed file contents → `GATHERED_INFO`
+3. Launch Explore agent to gather git info → `GATHERED_INFO`
+   - "Get git diff (use scope from Step 2). Read changed files. Return diff and file contents."
 
 4. Detect documentation destination from project structure (e.g., `docs/`, `README.md`). If unknown, ask user.
 

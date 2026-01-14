@@ -9,7 +9,7 @@ allowed-tools: "Read, Bash, Task, Glob, Grep, AskUserQuestion"
 
 2. Determine target via AskUserQuestion: `markdown file path` or `"キャンセル"`
 
-3. Gather: document content → `GATHERED_INFO`
+3. Read document file (path from Step 2) → `GATHERED_INFO`
 
 4. Execute reviewing-documents:
    - Resolve CONFIG: `python ~/.claude/scripts/resolve_config.py "$CWD" reviewing-documents`

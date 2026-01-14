@@ -52,7 +52,7 @@ Parse REQUIREMENTS from task prompt (document type, source info, target audience
 
 Run: `python ~/.claude/scripts/resolve_knowledge.py --refs "${TICKET_PATH}/knowledge-refs.md" --workflow "/doc-write" --base "${CONFIG.BASE_PATH}"`
 
-On success/partial: use `knowledge[].content` for Terminology section
+- On success/partial: use `knowledge[].content` for Terminology section
 
 **Step 4: Create documentation**
 

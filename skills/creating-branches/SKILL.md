@@ -21,13 +21,14 @@ Progress:
 - [ ] Step 1: Resolve configuration
 - [ ] Step 2: Parse task prompt
 - [ ] Step 3: Validate inputs
-- [ ] Step 4: Create branch with worktree
-- [ ] Step 5: Report results
+- [ ] Step 4: Check base branch up-to-date
+- [ ] Step 5: Create branch with worktree
+- [ ] Step 6: Report results
 ```
 
 **Step 1: Resolve configuration**
 
-Execute: `python ~/.claude/scripts/resolve_config.py "$CWD" creating-branches`
+Run: `python ~/.claude/scripts/resolve_config.py "$CWD" creating-branches`
 - Parse JSON output -> `CONFIG`
 - CONFIG contains: BASE_PATH
 
@@ -56,27 +57,38 @@ Convert BRANCH_NAME to kebab-case:
 
 Full branch name format: `<BRANCH_TYPE>/<kebab-case-name>`
 
-**Step 4: Create branch with worktree**
+**Step 4: Check base branch up-to-date**
+
+Detect base branch (develop > main > master) → `BASE_BRANCH`
+
+Fetch and compare commits
+
+If different:
+- AskUserQuestion: Update base branch?
+  - Yes → Update with pull --ff-only
+  - No → Continue
+
+**Step 5: Create branch with worktree**
 
 ```bash
 PARENT_DIR=$(dirname "$CONFIG.BASE_PATH")
 WORKTREE_PATH="$PARENT_DIR/<kebab-case-name>"
-git worktree add "$WORKTREE_PATH" -b "<BRANCH_TYPE>/<kebab-case-name>"
+git worktree add "$WORKTREE_PATH" -b "<BRANCH_TYPE>/<kebab-case-name>" {BASE_BRANCH}
 ```
 
 On success:
 - Worktree created at: `$PARENT_DIR/<kebab-case-name>`
-- Branch created: `<BRANCH_TYPE>/<kebab-case-name>`
+- Branch created: `<BRANCH_TYPE>/<kebab-case-name>` from `{BASE_BRANCH}`
 
 On failure:
 - Display error message
 - Common issues: branch already exists, worktree path exists
 
-**Step 5: Report results**
+**Step 6: Report results**
 
 Display summary:
 ```
-Branch created: <BRANCH_TYPE>/<kebab-case-name>
+Branch created: <BRANCH_TYPE>/<kebab-case-name> (from {BASE_BRANCH})
 Worktree path: <absolute-path-to-worktree>
 ```
 

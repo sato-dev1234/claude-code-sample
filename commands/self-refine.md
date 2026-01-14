@@ -9,7 +9,8 @@ allowed-tools: "Read, Write, Edit, Bash, Glob, Grep, Task, AskUserQuestion"
 
 2. Determine scope via AskUserQuestion: uncommitted (`git diff HEAD`) or branch (`git diff <BASE>...HEAD`)
 
-3. Gather: diff + changed file contents → `GATHERED_INFO`
+3. Launch Explore agent to gather git info → `GATHERED_INFO`
+   - "Get git diff (use scope from Step 2). Read changed files. Return diff and file contents."
 
 4. Self-Refine Loop:
 
@@ -24,9 +25,8 @@ allowed-tools: "Read, Write, Edit, Bash, Glob, Grep, Task, AskUserQuestion"
    - [ ] Fix 3 (skip if no issues)
    ```
 
-   **Review**:
-   - Resolve CONFIG: `python ~/.claude/scripts/resolve_config.py "$CWD" reviewing-code`
-   - Read ~/.claude/skills/reviewing-code/SKILL.md and execute with GATHERED_INFO, TICKET_PATH, and CONFIG
+   **Review**: Launch 1 agent with GATHERED_INFO, TICKET_PATH, and CONFIG:
+   - reviewing-code (sonnet)
 
    Output: "Review N: ISSUE_COUNT = {count of score >= 80}"
 
@@ -34,10 +34,7 @@ allowed-tools: "Read, Write, Edit, Bash, Glob, Grep, Task, AskUserQuestion"
    Instructions: "Fix issues with score >= 80. Use ~/.claude/templates/self-refine-report.md"
    After fix: Re-run step 3 to update GATHERED_INFO
 
-5. Write report to `<TICKET_PATH>/self-refine-report.md`:
-   - Iterations count, total fixes applied
-   - Per-iteration details
-   - Remaining issues
+5. Write report to `<TICKET_PATH>/self-refine-report.md`
 
 6. Report summary in Japanese
 

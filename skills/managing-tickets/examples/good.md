@@ -61,4 +61,3 @@ Always include item count table in requirements.md:
 | Technical Items | 4 | Pending |
 | **Total** | **12** | **In Progress** |
 ```
-

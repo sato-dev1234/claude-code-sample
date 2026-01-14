@@ -6,6 +6,8 @@ allowed-tools: Read, Grep, Glob, Bash
 
 ## Review workflow
 
+Copy this checklist and track your progress:
+
 ```
 Progress:
 - [ ] Step 1: Parse GATHERED_INFO, TICKET_PATH, and CONFIG
