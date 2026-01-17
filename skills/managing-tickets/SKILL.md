@@ -165,7 +165,7 @@ If script fails → show error message from stderr, END with exit code 1
        - Example: "test" matches "test", "test-driven", "unit-test" but NOT "contest"
     4. For matching tags → collect candidate knowledge files
     5. Display candidates with matched tags
-    6. Determine workflow section for each knowledge file using LLM (design/tdd/code-review/ui-test-design/doc-write/doc-review)
+    6. Determine workflow section for each knowledge file using LLM (design/tdd/code-review/ui-test-design/writing-documents/reviewing-documents)
     7. Create data structure:
        ```json
        {
@@ -236,7 +236,7 @@ If script fails → show error message from stderr, END with exit code 1
   - For each matched file path in tag-index.json:
     - If file not exists → Error: "Knowledge file not found: <path> (referenced in tag-index.json)", END with exit code 1
 - If matched count > 50 → Warning: "N matches found (may be too many)"
-- Determine workflow section for each knowledge file using LLM (design/tdd/code-review/ui-test-design/doc-write/doc-review)
+- Determine workflow section for each knowledge file using LLM (design/tdd/code-review/ui-test-design/writing-documents/reviewing-documents)
 - Create data structure:
   ```json
   {

@@ -39,8 +39,8 @@ Default workflow commands:
 - [ ] /design - 設計ドキュメント生成
 - [ ] /tdd - TDD実装 + コード品質改善 + テスト品質改善
 - [ ] /comment-self-refine - コメント品質自動改善
-- [ ] /doc-write - ドキュメント作成
-- [ ] /doc-review - ドキュメントレビュー
+- [ ] /writing-documents - ドキュメント作成
+- [ ] /reviewing-documents - ドキュメントレビュー
 - [ ] /ui-test-design - UIテスト設計
 ```
 

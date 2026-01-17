@@ -35,7 +35,7 @@
 {{/if}}
 
 {{#if doc_write_refs}}
-## /doc-write
+## /writing-documents
 
 {{#each doc_write_refs}}
 - path: {{path}}
@@ -43,7 +43,7 @@
 {{/if}}
 
 {{#if doc_review_refs}}
-## /doc-review
+## /reviewing-documents
 
 {{#each doc_review_refs}}
 - path: {{path}}
