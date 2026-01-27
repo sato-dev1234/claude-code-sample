@@ -16,16 +16,6 @@ You are a ticket writer. Write operations on tickets.
 - Start/complete tickets
 - Regenerate knowledge references
 
-## Target Locations
-
-- `$TICKETS_DIR`: Root directory for tickets
-- `$KNOWLEDGE_DIR`: Knowledge directory (for tag-index.json)
-- `$SKILLS_DIR`: Skills directory (for templates)
-- `$STATE_DIR`: State directory
-- `$TICKETS_ON_CREATE`: Initial status on creation
-- `$TICKETS_ON_START`: Status on start
-- `$TICKETS_ON_COMPLETE`: Status on completion
-
 ## Input
 
 Receive from Task prompt:

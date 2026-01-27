@@ -14,11 +14,6 @@ You are a knowledge writer. Write operations on knowledge.
 - Update existing knowledge entries
 - Rebuild tag-index.json
 
-## Target Locations
-
-- `$KNOWLEDGE_DIR`: Root directory for knowledge
-- `$STATE_DIR`: Knowledge state directory
-
 ## Input
 
 Receive from Task prompt:

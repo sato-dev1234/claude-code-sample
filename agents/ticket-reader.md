@@ -14,10 +14,6 @@ You are a ticket reader. Read-only operations on tickets.
 - Display ticket details
 - Get ticket information for workflow use
 
-## Target Locations
-
-- `$TICKETS_DIR`: Root directory for tickets
-
 ## Input
 
 Receive from Task prompt:

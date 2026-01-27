@@ -14,10 +14,6 @@ You are a knowledge reader. Read-only operations on knowledge.
 - List all knowledge entries
 - Get single knowledge entry content
 
-## Target Locations
-
-- `$KNOWLEDGE_DIR`: Root directory for knowledge
-
 ## Input
 
 Receive from Task prompt:
