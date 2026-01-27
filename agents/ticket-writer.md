@@ -33,7 +33,7 @@ Additional input:
 - `REQUIREMENTS`: Requirements content (required)
 
 Process:
-1. Read templates from `$SKILLS_DIR/create-ticket/templates/`:
+1. Read templates from `~/.claude/skills/create-ticket/templates/`:
    - readme-template.md
    - requirements-template.md
    - knowledge-refs-template.md

@@ -53,7 +53,7 @@ Creates new ticket with templates and knowledge refs.
    TICKET_ID=$TICKET_ID
    REQUIREMENTS=$REQUIREMENTS
    ```
-   - ticket-writer self-loads templates from $SKILLS_DIR/create-ticket/templates/
+   - ticket-writer self-loads templates from ~/.claude/skills/create-ticket/templates/
    - ticket-writer reads $TICKETS_ON_CREATE from environment
 
 7. Output: TICKET_ID, TICKET_PATH, END

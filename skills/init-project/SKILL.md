@@ -115,10 +115,9 @@ Calculate paths (convert to Unix format: `D:/path` → `/d/path`):
 - `TICKETS_DIR` = `$PROJECT_DATA_DIR/tickets`
 - `KNOWLEDGE_DIR` = `$PROJECT_DATA_DIR/knowledge`
 - `STATE_DIR` = `$PROJECT_DATA_DIR/.knowledge-state`
-- `SKILLS_DIR` = `~/.claude/skills` (expand to absolute path)
 
 Merge into env section:
-- PROJECT_NAME, TICKETS_DIR, KNOWLEDGE_DIR, STATE_DIR, SKILLS_DIR
+- PROJECT_NAME, TICKETS_DIR, KNOWLEDGE_DIR, STATE_DIR
 - TEST_FILTER, TICKETS_PREFIX
 - TICKETS_DIGITS = "5"
 - TICKETS_ON_CREATE = "backlog"
