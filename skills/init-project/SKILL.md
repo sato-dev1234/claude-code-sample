@@ -1,51 +1,84 @@
 ---
 name: init-project
-description: "Initialize project configuration"
+description: "Initializes project configuration"
 user-invocable: true
 allowed-tools: Read, Write, Bash, AskUserQuestion, Glob
 ---
 
 # /init-project
 
-## Variables
+Initializes project configuration.
+
+## Progress Checklist
 
 ```
-GLOBAL_CONFIG = ~/.claude/global-config.yaml
-TEMPLATE = ~/.claude/templates/project-template.yaml
-storage_path = GLOBAL_CONFIG.paths.storage_path
-PROJECT_NAME = $(python ~/.claude/scripts/get_project_name.py "$(pwd)")
-BASE_PATH = {storage_path}/{PROJECT_NAME}
+- [ ] Step 1: Check Global Config
+- [ ] Step 2: Confirm Project Name
+- [ ] Step 3: Check Existing Config
+- [ ] Step 4: Create Directories
+- [ ] Step 5: Detect Test File Patterns
+- [ ] Step 6: Get Ticket Prefix
+- [ ] Step 7: Update settings.local.json
+- [ ] Step 8: Update .git/info/exclude
+- [ ] Step 9: Output
 ```
 
-## 1. Require Global Config
+## Steps
 
-- GLOBAL_CONFIG not exists OR storage_path not set → Error: "Run /init-global first"
+### Variables
 
-## 2. Confirm Project Name
+```
+GLOBAL_SH = ~/.claude/global.sh
+PROJECT_NAME = $(basename "$(git remote get-url origin)" .git) || $(basename "$(pwd)")
+PROJECT_DATA_DIR = $STORAGE_DIR/$PROJECT_NAME
+```
 
-AskUserQuestion: "Project name?" (default: PROJECT_NAME)
+### 1. Check Global Config
+
+- Source GLOBAL_SH to get STORAGE_DIR
+- If GLOBAL_SH not exists OR STORAGE_DIR not set:
+  - Execute Global Setup Flow (below), then continue to Step 2
+
+#### Global Setup Flow
+
+1. AskUserQuestion: "storage_dir を入力してください（プロジェクトデータの保存先）"
+   - Default: `~/Documents/project-management`
+2. Validate:
+   - Expand `~` to absolute path
+   - Parent directory not exists → Error
+   - storage_dir directory not exists → Create it
+3. Write to `~/.claude/global.sh` (convert to Unix format: `D:/path` → `/d/path`):
+   ```bash
+   export STORAGE_DIR="<INPUT>"
+   ```
+4. Set STORAGE_DIR variable and continue
+
+### 2. Confirm Project Name
+
+AskUserQuestion: "Project name?" (default: $PROJECT_NAME)
 - Empty → Error
 
-## 3. Require Template
+### 3. Check Existing Config
 
-- TEMPLATE not exists → Error
+Read `.claude/settings.local.json` in project root.
 
-## 4. Check Existing Config
-
-- `BASE_PATH/project-config.yaml` exists → AskUserQuestion: "Overwrite?" (Yes/No)
+If file exists AND has `env.PROJECT_NAME`:
+- AskUserQuestion: "既存の設定を上書きしますか？" (Yes/No)
 - No → Exit
 
-## 5. Create Directories
+### 4. Create Directories
 
-Read STATUSES from TEMPLATE.tickets.statuses
+Create directories:
+- `$PROJECT_DATA_DIR/tickets/backlog/`
+- `$PROJECT_DATA_DIR/tickets/in-progress/`
+- `$PROJECT_DATA_DIR/tickets/in-review/`
+- `$PROJECT_DATA_DIR/tickets/blocked/`
+- `$PROJECT_DATA_DIR/tickets/pending/`
+- `$PROJECT_DATA_DIR/tickets/completed/`
+- `$PROJECT_DATA_DIR/tickets/archived/`
+- `$PROJECT_DATA_DIR/knowledge/`
 
-```
-BASE_PATH/
-├── tickets/{STATUSES}/
-└── knowledge/
-```
-
-Create categories.json:
+Write `$PROJECT_DATA_DIR/knowledge/categories.json` (skip if exists):
 ```json
 {
   "categories": {
@@ -56,22 +89,51 @@ Create categories.json:
 }
 ```
 
-Write to: `BASE_PATH/knowledge/categories.json`
+### 5. Detect Test File Patterns
 
-## 6. Generate Config
+Glob for test files → collect matching glob patterns
 
-Read TEMPLATE, apply replacements:
+If patterns found:
+- AskUserQuestion: "使用するテストファイルパターンは？" (multiSelect)
+  - Options: detected patterns + "なし"
+- Set $TEST_FILTER = selected pattern(s), comma-separated
 
-| Placeholder | Value |
-|-------------|-------|
-| `PROJ-` | TICKET_PREFIX (各単語頭文字 + "-") |
+If no patterns found:
+- $TEST_FILTER = ""
 
-Write to `BASE_PATH/project-config.yaml`
+### 6. Get Ticket Prefix
 
-## 7. Output
+AskUserQuestion: "チケットIDのプレフィックスを入力してください"
+- Default: "PROJ-"
+- Set $TICKETS_PREFIX = input
 
-```
-✓ Project initialized
-- Project: <PROJECT_NAME>
-- Base Path: <BASE_PATH>
-```
+### 7. Update settings.local.json
+
+Path: `.claude/settings.local.json` (in project root)
+
+Calculate paths (convert to Unix format: `D:/path` → `/d/path`):
+- `TICKETS_DIR` = `$PROJECT_DATA_DIR/tickets`
+- `KNOWLEDGE_DIR` = `$PROJECT_DATA_DIR/knowledge`
+- `STATE_DIR` = `$PROJECT_DATA_DIR/.knowledge-state`
+- `SKILLS_DIR` = `~/.claude/skills` (expand to absolute path)
+
+Merge into env section:
+- PROJECT_NAME, TICKETS_DIR, KNOWLEDGE_DIR, STATE_DIR, SKILLS_DIR
+- TEST_FILTER, TICKETS_PREFIX
+- TICKETS_DIGITS = "5"
+- TICKETS_ON_CREATE = "backlog"
+- TICKETS_ON_START = "in-progress"
+- TICKETS_ON_COMPLETE = "completed"
+
+Keep other sections unchanged (permissions, etc.)
+
+### 8. Update .git/info/exclude
+
+If `.git/info/exclude` exists, append entries not yet listed:
+- `.claude/settings.local.json`
+- `.claude/refine-loop/`
+- `.claude/auto-run/`
+
+### 9. Output
+
+Display PROJECT_NAME and PROJECT_DATA_DIR

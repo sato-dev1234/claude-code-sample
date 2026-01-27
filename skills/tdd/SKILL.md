@@ -1,125 +1,74 @@
 ---
 name: tdd
-description: "Execute complete TDD workflow: TDD → self-refine"
+description: "Executes complete TDD workflow: parallel TDD → refine-loop"
 user-invocable: true
-allowed-tools: Read, Write, Edit, Bash, Task, Glob, Grep, AskUserQuestion
+allowed-tools: Read, Write, Edit, Bash, Task, Skill, Glob, Grep, TaskList, TaskGet, TaskUpdate, TaskOutput
+hooks:
+  Stop:
+    - hooks:
+        - type: command
+          command: "bash -c 'node ~/.claude/scripts/task-runner-hook.js'"
 ---
 
 # /tdd
 
-1. Select target ticket via managing-tickets → `TICKET_PATH`
+Orchestrator for TDD workflow with parallel execution.
 
-2. Read `<TICKET_PATH>/requirements.md`
-   - If not exists → Error: "requirements.md not found at <TICKET_PATH>", END with exit code 1
-
-3. Read `<TICKET_PATH>/design.md`
-   - If not exists → Error: "design.md not found at <TICKET_PATH>. Run /design first.", END with exit code 1
-
-4. Format requirements as `REQUIREMENTS`
-
-5. Format design as `DESIGN`
-
-6. Resolve CONFIG: `python ~/.claude/scripts/resolve_config.py "$CWD" tdd`
-
-7. Execute TDD workflow (see below) with REQUIREMENTS, DESIGN, TICKET_PATH, CONFIG
-   - Capture: TDD_FILES, TDD_TEST_COUNT
-
-8. Update <TICKET_PATH>/tasks.md: mark completed items based on TDD_FILES
-
-9. Determine base branch: `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'` → `BASE_BRANCH`
-
-10. Launch Explore agent to gather git info → `GATHERED_INFO`
-    - "Get git diff with `git diff <BASE_BRANCH>...HEAD`. Read changed files. Return diff and file contents."
-
-11. Self-Refine Loop:
-
-    Copy this checklist and execute each unchecked item in order:
-
-    ```
-    - [ ] Review 1
-    - [ ] Fix 1 (skip if no issues)
-    - [ ] Review 2 (skip if Fix 1 skipped)
-    - [ ] Fix 2 (skip if no issues)
-    - [ ] Review 3 (skip if Fix 2 skipped)
-    - [ ] Fix 3 (skip if no issues)
-    ```
-
-    **Review**: Launch 2 agents in parallel with GATHERED_INFO, TICKET_PATH, and CONFIG:
-    - code-review (sonnet)
-    - test-review (sonnet)
-
-    Output: "Review N: ISSUE_COUNT = {count of score >= 80}"
-
-    **Fix**: Launch single agent (sonnet) with GATHERED_INFO + REVIEW_RESULTS.
-    Instructions: "Fix issues with score >= 80. Use ~/.claude/templates/self-refine-report.md"
-    After fix: Re-run step 10 to update GATHERED_INFO
-
-    Capture: `REFINE_ITERATIONS`, `REFINE_FIXES`
-
-12. Write report to `<TICKET_PATH>/self-refine-report.md`
-
-13. Mark `/self-refine` as completed in <TICKET_PATH>/tasks.md Workflow section
-
-14. Report summary in Japanese
-
-15. Mark `/tdd` as completed in <TICKET_PATH>/tasks.md Workflow section
-
----
-
-## TDD workflow
-
-### Quick start
-
-RED-GREEN-REFACTOR cycle:
-```
-1. RED: Write failing test → verify it fails
-2. GREEN: Implement minimal code → verify test passes
-3. REFACTOR: Improve code → verify tests still pass
-```
-
-Run tests:
-```bash
-npm test  # or pytest, gradle test, etc.
-```
-
-### Workflow
+## Progress Checklist
 
 ```
-Progress:
-- [ ] Step 1: Load project knowledge
-- [ ] Step 2: Create test list
-- [ ] Step 3: Execute RED-GREEN-REFACTOR cycle
-- [ ] Step 4: Generate completion report
+- [ ] Step 1: Parse args and set variables
+- [ ] Step 2: Invoke ticket-reader agent
+- [ ] Step 3: Validate design exists
+- [ ] Step 4: Invoke knowledge-reader agent
+- [ ] Step 5: Execute TDD with parallel orchestration
+- [ ] Step 6: Invoke /refine-loop (if no errors)
+- [ ] Step 7: Generate report
 ```
 
-**Step 1: Load project knowledge**
+## Steps
 
-Run: `python ~/.claude/scripts/resolve_knowledge.py --refs "${TICKET_PATH}/knowledge-refs.md" --workflow "/tdd" --base "${CONFIG.BASE_PATH}"`
+1. Parse args and set variables:
+   - `ticket` → TICKET_ID (required, error if not provided)
+   - `iterations` → MAX_ITERATIONS (default: 10)
 
-- On success/partial: use `knowledge[].content` for Troubleshooting section
-- On failure: continue without knowledge
+2. Invoke ticket-reader agent:
+   - Task prompt: `OPERATION=get TICKET_ID=$TICKET_ID`
+   - If error → END
+   - Parse output → TICKET_PATH
 
-**Step 2: Create test list**
+3. Validate design exists:
+   - Check if <TICKET_PATH>/design.md exists
+   - If not → Error: "design.md not found. Run /design first.", END
 
-Create test list from REQUIREMENTS and DESIGN, ordered simple to complex.
+4. Invoke knowledge-reader agent:
+   - Task prompt: `OPERATION=resolve TICKET_PATH=$TICKET_PATH WORKFLOW=/tdd`
+   - Parse output → KNOWLEDGE (empty array if error)
 
-### Implementation principles
+5. Execute TDD with parallel orchestration:
 
-Before starting RED-GREEN-REFACTOR cycle, internalize these principles:
+   a. Get ready tasks:
+      - Run `node ~/.claude/scripts/resolve-task-dependencies.js --ticket=$TICKET_ID --filter="Implement:"`
+      - If no tasks → Error: "No implementation tasks found", END
 
-- **WHY-first comments**: Write reasons (business constraints, security requirements), not HOW
-- **Declarative comments**: Avoid conversational tone in comments, state facts
-- **Input validation first**: For functions receiving external input, implement validation first
+   b. For each ready task:
+      - TaskGet(task_id) to get task details
+      - TaskUpdate(task_id, status="in_progress")
+      - Launch tdd-runner with Task tool:
+        - subagent_type: tdd-runner
+        - run_in_background: true
+        - prompt includes: TASK_SUBJECT, TASK_DESCRIPTION, KNOWLEDGE, CWD
 
-**Step 3: Execute RED-GREEN-REFACTOR cycle**
+   c. Monitor and iterate:
+      - Use TaskOutput to check completion
+      - On completion: TaskUpdate(task_id, status="completed")
+      - Refresh dependencies, launch newly ready tasks
+      - Repeat until all complete
 
-Execute RED-GREEN-REFACTOR cycle for each test item:
-- RED: Write failing test
-- GREEN: Verify failure, implement minimal code
-- REFACTOR: If needed, improve code
+   d. Collect results: TDD_FILES, TDD_TEST_COUNT, TDD_PASSED_COUNT
 
-Apply implementation principles during GREEN and REFACTOR phases.
+6. Invoke /refine-loop (if no TDD errors):
+   - Args: "type=code-tests ticket={TICKET_PATH} scope=uncommitted iterations={MAX_ITERATIONS}"
 
-**Step 4: Generate completion report**
-
-Generate completion report with test list status and implementation summary.
+7. Generate report:
+   - Write to <TICKET_PATH>/tdd-report.md

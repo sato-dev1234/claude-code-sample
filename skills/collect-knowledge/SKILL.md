@@ -1,68 +1,71 @@
 ---
 name: collect-knowledge
-description: "Collect knowledge from source code analysis"
+description: "Collects knowledge from source code analysis"
 user-invocable: true
-allowed-tools: Read, Write, Bash, AskUserQuestion, Glob, Grep
+allowed-tools: Read, Bash, AskUserQuestion, Glob, Grep, Task
 ---
 
 # /collect-knowledge
 
-## Variables
+Orchestrator for knowledge collection from source code.
+
+## Progress Checklist
 
 ```
-KNOWLEDGE_PATH = CONFIG.BASE_PATH + "/knowledge"
-STATE_PATH = CONFIG.BASE_PATH + "/.knowledge-state"
+- [ ] Step 1: Get source files
+- [ ] Step 2: Analyze source code
+- [ ] Step 3: Load categories
+- [ ] Step 4: Generate knowledge entries
+- [ ] Step 5: Confirm bulk creation
+- [ ] Step 6: Create files
+- [ ] Step 7: Rebuild index
+- [ ] Step 8: Report
 ```
 
-## 1. Resolve Configuration
+## Steps
 
-- Execute: `python ~/.claude/scripts/resolve_config.py "$CWD" retrieving-knowledge`
-- Parse JSON output → CONFIG
-- CONFIG.BASE_PATH required → Error if missing: "CONFIG.BASE_PATH not set"
+1. Get source files:
+   - AskUserQuestion: "Source file path or glob pattern?"
+   - Resolve globs → SOURCE_FILES
+   - Validate files exist
 
-## 2. Get Source Files
+2. Analyze source code:
+   - For each source file: read and extract documentation-worthy concepts
+   - Build CONCEPTS list with category, id, tags, content
 
-AskUserQuestion: "Source file path or glob pattern?"
-- Resolve globs → SOURCE_FILES
-- Validate files exist
+3. Load categories:
+   - Invoke knowledge-reader: `OPERATION=list`
+   - Parse CATEGORY_LIST
 
-## 3. Analyze Source Code
+4. Generate knowledge entries:
+   - For each concept:
+     - Determine category (from existing or propose new)
+     - Generate id, tags, related
+     - Structure content
 
-For each source file:
-- Read file content
-- Extract documentation-worthy concepts
+5. Confirm bulk creation:
+   - AskUserQuestion: Show all entries for confirmation
+   - Options: [Create all] [Modify] [Cancel]
+   - If Cancel → END
 
-## 4. Load or Create Categories
+6. Create files:
+   - Get current commit: `git rev-parse HEAD`
+   - For each confirmed entry:
+     - Invoke knowledge-writer:
+       ```
+       OPERATION=create
+       CATEGORY=$CATEGORY
+       ID=$ID
+       TAGS=$TAGS
+       RELATED=$RELATED
+       CONTENT=$CONTENT
+       SOURCE_REFS=$SOURCE_REFS
+       COMMIT_HASH=$COMMIT_HASH
+       ```
 
-- Read: KNOWLEDGE_PATH/categories.json
-- If not exists → Create empty template: `{"categories": {}}`
+7. Rebuild index:
+   - Invoke knowledge-writer: `OPERATION=rebuild-index`
 
-## 5. Generate Knowledge Entries
-
-For each identified concept:
-- Determine category (from existing or propose new)
-- If new category → Add to categories.json
-- Generate id, tags, related
-- Structure content (Terminology, Specifications, Troubleshooting)
-
-## 6. Confirm Bulk Creation
-
-AskUserQuestion: Show all entries for confirmation
-- Options: [Create all] [Modify] [Cancel]
-
-## 7. Create Files
-
-For each confirmed entry:
-- Create KNOWLEDGE_PATH/{category}/{id}.md with YAML frontmatter
-- Create STATE_PATH/{category}/{id}.json with refs and commit
-
-## 8. Rebuild Index
-
-- Execute: `python ~/.claude/scripts/build_tag_index.py "$KNOWLEDGE_PATH"`
-
-## 9. Report
-
-Display summary:
-- Categories used
-- Knowledge files created
-- Source files analyzed
+8. Report:
+   - Display summary: categories used, files created, sources analyzed
+   - END
